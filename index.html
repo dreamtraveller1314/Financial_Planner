@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
     <title>AI Financial Planner</title>
   </head>
 
@@ -35,7 +36,7 @@
         <div id="expenses-list">
           <div class="expense-row">
             <input type="text"   placeholder="e.g. Rent"  class="expense-name" />
-            <input type="number" placeholder="Amount"     class="expense-amount" />
+            <input type="number" placeholder="1000"     class="expense-amount" />
             <button onclick="removeExpense(this)">✕</button>
           </div>
         </div>
@@ -45,10 +46,10 @@
 
       <div class="form-group">
         <label>Lifestyle Notes (optional)</label>
-        <textarea id="notes" placeholder="e.g. I have a car loan, I eat out often, I'm saving for a house..."></textarea>
+        <textarea id="notes" placeholder="e.g. I eat out often, I'm saving for a house..."></textarea>
       </div>
 
-      <button class="submit-btn" onclick="generatePlan()">✨ Generate My Budget Plan</button>
+      <button class="submit-btn" onclick="generatePlan()">Generate My Budget Plan</button>
 
     </div>
 
