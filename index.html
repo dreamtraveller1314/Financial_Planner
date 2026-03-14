@@ -7,9 +7,53 @@
     <title>AI Financial Planner</title>
   </head>
 
-  <body>
-    <h1>AI Financial Planner</h1>
-    <p>Your personal budget advisor</p>
-  </body>
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>AI Financial Planner</h1>
+      <p>Enter your details and get a personalised budget plan</p>
+    </div>
+
+    <div class="form-box">
+
+      <div class="form-group">
+        <label>Monthly Income (after tax)</label>
+        <input type="number" id="income" placeholder="e.g. 4500" />
+      </div>
+
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" id="country" placeholder="e.g. Malaysia" />
+      </div>
+
+      <div class="form-group">
+        <label>Fixed Monthly Expenses</label>
+        <p class="hint">Add things you MUST pay every month (rent, car loan, etc.)</p>
+
+        <div id="expenses-list">
+          <div class="expense-row">
+            <input type="text"   placeholder="e.g. Rent"  class="expense-name" />
+            <input type="number" placeholder="Amount"     class="expense-amount" />
+            <button onclick="removeExpense(this)">✕</button>
+          </div>
+        </div>
+
+        <button class="add-btn" onclick="addExpense()">+ Add Expense</button>
+      </div>
+
+      <div class="form-group">
+        <label>Lifestyle Notes (optional)</label>
+        <textarea id="notes" placeholder="e.g. I have a car loan, I eat out often, I'm saving for a house..."></textarea>
+      </div>
+
+      <button class="submit-btn" onclick="generatePlan()">✨ Generate My Budget Plan</button>
+
+    </div>
+
+  </div>
+
+</body>
 
 </html>
