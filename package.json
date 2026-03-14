@@ -19,6 +19,12 @@
   },
   "homepage": "https://github.com/dreamtraveller1314/Financial_Planner#readme",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "claude": "^0.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "groq-sdk": "^1.1.1",
     "openai": "^6.29.0"
   }
 }
