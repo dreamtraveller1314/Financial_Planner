@@ -27,3 +27,19 @@ function getExpenses() {
     });
     return expenses;
 }
+
+ function generatePlan() {
+    const income   = document.getElementById('income').value;
+    const country  = document.getElementById('country').value;
+    const notes    = document.getElementById('notes').value;
+    const expenses = getExpenses();
+    if (!income || !country) {
+      alert('Please fill in your income and country first!');
+      return;
+    }
+    console.log('Income:', income);
+    console.log('Country:', country);
+    console.log('Notes:', notes);
+    console.log('Expenses:', expenses);
+    alert('Form works! Coming next step');
+  }
