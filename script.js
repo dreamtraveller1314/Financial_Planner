@@ -209,14 +209,15 @@ function showResults(result) {
         `;
 
     try {
-      const response = await fetch("https://financial-planner-api-fzgg.onrender.com/analyze", {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const response = await fetch("https://financial-planner-api-fzgg.onrender.com/chat", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: prompt }),
+        signal: controller.signal
+      });
+      clearTimeout(timeout);
       const data = await response.json();
       const result = JSON.parse(data.reply);
       
