@@ -209,10 +209,12 @@ function showResults(result) {
         `;
 
     try {
-      const response = await fetch('http://localhost:3000/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: prompt })
+      const response = await fetch("https://financial-planner-api-fzgg.onrender.com/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
       });
 
       const data = await response.json();
