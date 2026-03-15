@@ -122,7 +122,7 @@ function showResults(result) {
           <div class="cat-bar-wrap">
             <div class="cat-bar" style="width: ${cat.percent}%"></div>
           </div>
-          <div class="cat-amount">${cat.amount}</div>
+          <div class="cat-amount">${Number(cat.amount).toLocaleString()}</div>
           <div class="cat-tip">${cat.tip}</div>
         </div>
       `;
@@ -150,12 +150,15 @@ function showResults(result) {
   function replan() {
     document.getElementById('results').style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('.form-group, .submit-btn')
+    .forEach(el => el.style.display = '');
   }
 
-async function generatePlan() {
+  async function generatePlan() {
     const income = document.getElementById('income').value;
     const country = document.getElementById('country').value;
     const notes = document.getElementById('notes').value;
+    window.userIncome = income;
     const expenses = getExpenses();
 
     if (!income || !country) {
