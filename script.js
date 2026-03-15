@@ -1,3 +1,34 @@
+const loadingTips = [
+    "💡 The 50/30/20 rule — 50% needs, 30% wants, 20% savings",
+    "💡 Emergency fund should cover 3–6 months of expenses",
+    "💡 Pay yourself first — save before you spend",
+    "💡 Small daily savings add up to big yearly totals",
+    "💡 Tracking spending is the first step to saving more"
+  ];
+
+  let tipInterval;
+
+  function showLoading(show) {
+    const screen = document.getElementById('loading-screen');
+    const formContent = document.querySelectorAll('.form-group, .submit-btn');
+
+    if (show) {
+      formContent.forEach(el => el.style.display = 'none');
+      screen.style.display = 'block';
+      let i = 0;
+      document.getElementById('loading-text').textContent = loadingTips[0];
+      tipInterval = setInterval(() => {
+        i = (i + 1) % loadingTips.length;
+        document.getElementById('loading-text').textContent = loadingTips[i];
+      }, 2500);
+
+    } else {
+      formContent.forEach(el => el.style.display = '');
+      screen.style.display = 'none';
+      clearInterval(tipInterval);
+    }
+  }
+
 function addExpense() {
     const list = document.getElementById('expenses-list');
     const row = document.createElement('div');
@@ -135,6 +166,8 @@ async function generatePlan() {
     const btn = document.querySelector('.submit-btn');
     btn.textContent = 'Planning for you...';
     btn.disabled = true;
+    document.getElementById('results').style.display = 'none';
+    showLoading(true);
 
     const expensesText = expenses.length > 0 
       ? expenses.map(e => `${e.name}: ${e.amount}`).join(', ') 
@@ -192,5 +225,6 @@ async function generatePlan() {
     } finally {
       btn.textContent = 'Generate My Budget Plan';
       btn.disabled = false;
+      showLoading(false);
     }
 }
