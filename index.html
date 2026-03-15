@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css">
-    <title>AI Financial Planner</title>
+    <title>Financial Planner</title>
   </head>
 
 <body>
@@ -13,7 +13,7 @@
   <div class="container">
 
     <div class="header">
-      <h1>AI Financial Planner</h1>
+      <h1>Financial Planner</h1>
       <p>Enter your details and get a personalised budget plan</p>
     </div>
 
@@ -51,8 +51,29 @@
 
       <button class="submit-btn" onclick="generatePlan()">Generate My Budget Plan</button>
     </div>
+    <div class="results-box" id="results" style="display:none">
+      <div class="result-summary" id="result-summary"></div>
+      <div class="health-row">
+        <div class="health-card" id="health-card">
+          <p class="health-label">Budget Health</p>
+          <p class="health-score" id="health-score"></p>
+          <p class="health-text"  id="health-label"></p>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="pie-chart"></canvas>
+        </div>
+      </div>
+      <h2 class="section-title">Your Budget Breakdown</h2>
+      <div class="cards-grid" id="cards-grid"></div>
+      <h2 class="section-title">Top Tips For You</h2>
+      <div class="tips-box" id="tips-box"></div>
+      <div id="warnings-box"></div>
+      <button class="replan-btn" onclick="replan()">↩ Adjust & Re-plan</button>
+
+    </div>
   </div>
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 

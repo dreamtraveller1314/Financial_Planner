@@ -28,6 +28,99 @@ function getExpenses() {
     return expenses;
 }
 
+function showResults(result) {
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('result-summary').textContent = result.summary;
+    document.getElementById('health-score').textContent = result.health_score;
+    document.getElementById('health-label').textContent = result.health_label;
+    const scoreEl = document.getElementById('health-score');
+    if (result.health_score >= 70) {
+      scoreEl.style.color = '#4a8c5c';
+    } else if (result.health_score >= 40) {
+      scoreEl.style.color = '#c8956c';
+    } else {
+      scoreEl.style.color = '#c0614a';
+    }
+    const labels  = result.categories.map(c => ' ' + c.name);
+    const amounts = result.categories.map(c => c.amount);
+    const colors  = [
+      '#c8956c','#e8b89a','#8fae8b','#b5c99a',
+      '#7da0b5','#a8c4d4','#c4a882','#d4b896',
+      '#9b8ea0','#c2b5c8'
+    ];
+    if (window.myChart) window.myChart.destroy();
+
+    const ctx = document.getElementById('pie-chart').getContext('2d');
+    window.myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: amounts,
+          backgroundColor: colors,
+          borderWidth: 2,
+          borderColor: '#fffdf9'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: { size: 11, family: 'Segoe UI' },
+              color: '#4a3f35',
+              padding: 10,
+              boxWidth: 12
+            }
+          }
+        }
+      }
+    });
+    const grid = document.getElementById('cards-grid');
+    grid.innerHTML = '';
+
+    result.categories.forEach(cat => {
+      grid.innerHTML += `
+        <div class="cat-card">
+          <div class="cat-top">
+            <span class="cat-name">${cat.name}</span>
+            <span class="cat-percent">${cat.percent}%</span>
+          </div>
+          <div class="cat-bar-wrap">
+            <div class="cat-bar" style="width: ${cat.percent}%"></div>
+          </div>
+          <div class="cat-amount">${cat.amount}</div>
+          <div class="cat-tip">${cat.tip}</div>
+        </div>
+      `;
+    });
+    const tipsBox = document.getElementById('tips-box');
+    tipsBox.innerHTML = '';
+    result.top_tips.forEach(tip => {
+      tipsBox.innerHTML += `
+        <div class="tip-item">
+          <div class="tip-dot"></div>
+          <span>${tip}</span>
+        </div>
+      `;
+    });
+    const warningsBox = document.getElementById('warnings-box');
+    warningsBox.innerHTML = '';
+    if (result.warnings && result.warnings.length > 0) {
+      result.warnings.forEach(w => {
+        warningsBox.innerHTML += `
+          <div class="warning-item">⚠️ ${w}</div>
+        `;
+      });
+    }
+  }
+  function replan() {
+    document.getElementById('results').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 async function generatePlan() {
     const income = document.getElementById('income').value;
     const country = document.getElementById('country').value;
@@ -53,7 +146,7 @@ async function generatePlan() {
       - Country: ${country}
       - Fixed monthly expenses: ${expensesText}
       - Lifestyle notes: ${notes || 'None'}
-      Based on this, create a realistic and practical monthly budget plan.
+      Based on this, create a realistic and practical monthly budget plan and remember to based on commodity price in ${country}.
       Reply ONLY with a valid JSON object — no explanation, no extra text, just the JSON.
       Use this exact format:
       {
@@ -91,7 +184,7 @@ async function generatePlan() {
       
       console.log('AI Prompt:', prompt);
       console.log('AI Budget Plan:', result);
-      alert('Success! Check the console (F12) to see your budget data.');
+      showResults(result);
 
     } catch (error) {
       console.error('Error:', error);
