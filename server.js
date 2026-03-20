@@ -7,7 +7,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const apiKey = process.env.GROQ_API_KEY;
+
+if (!apiKey) {
+  console.error("ERROR: No API Key found! Check Render Environment Variables.");
+}
+
+const groq = new Groq({ apiKey });
 
 app.post('/chat', async (req, res) => {
   try {
