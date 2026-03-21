@@ -227,7 +227,7 @@ function showResults(result) {
 
     } catch (error) {
       console.error('Error:', error);
-      alert('Could not connect to the server. Is "node server.js" running?');
+      alert('Wait for 5 mins and try again!');
     } finally {
       btn.textContent = 'Generate My Budget Plan';
       btn.disabled = false;
