@@ -8,75 +8,122 @@
     <title>Financial Planner</title>
   </head>
 
-<body>
+  <body>
 
-  <div class="container">
-
-    <div class="header">
-      <h1>Financial Planner</h1>
-      <p>Enter your details and get a personalised budget plan</p>
+    <div id="dashboard-nav" class="nav-container" style="display: none;">
+      <span class="user-email" id="user-display-email"></span>
+      <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('planner')">Budget Planner</button>
+        <button class="tab-btn" onclick="switchTab('savings')">Savings Tracker</button>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
     </div>
 
-    <div class="form-box">
-      <div id="loading-screen" style="display:none; text-align:center; padding: 40px 0;">
-        <div class="spinner"></div>
-        <p class="loading-text" id="loading-text">Analysing your finances...</p>
+    <div class="container">
+
+      <div id="auth-box" class="form-box">
+        <div class="auth-header">
+          <h2>Welcome to Financial Planner</h2>
+          <p>Enter your username and password.</p>
+        </div>
+        
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="auth-username"/>
+        </div>
+        
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="auth-password"/>
+        </div>
+
+        <button class="submit-btn" id="auth-primary-btn" onclick="handleAuth()">Sign In / Sign Up</button>
       </div>
 
-      <div class="form-group">
-        <label>Monthly Income (after tax)</label>
-        <input type="number" id="income" placeholder="e.g. 4500" />
-      </div>
+      <div id="tab-planner" class="tab-content" style="display: none;">
+        <div class="header">
+          <h1>Financial Planner</h1>
+          <p>Enter your details and get a personalised budget plan</p>
+        </div>
 
-      <div class="form-group">
-        <label>Country</label>
-        <input type="text" id="country" placeholder="e.g. Malaysia" />
-      </div>
-
-      <div class="form-group">
-        <label>Fixed Monthly Expenses</label>
-        <p class="hint">Add things you MUST pay every month (rent, car loan, etc.)</p>
-
-        <div id="expenses-list">
-          <div class="expense-row">
-            <input type="text"   placeholder="e.g. Rent"  class="expense-name" />
-            <input type="number" placeholder="1000"     class="expense-amount" />
-            <button onclick="removeExpense(this)">✕</button>
+        <div class="form-box">
+          <div id="loading-screen" style="display:none; text-align:center; padding: 40px 0;">
+            <div class="spinner"></div>
+            <p class="loading-text" id="loading-text">Analysing your finances...</p>
           </div>
+
+          <div class="form-group">
+            <label>Monthly Income (after tax)</label>
+            <input type="number" id="income" placeholder="e.g. 4500" />
+          </div>
+
+          <div class="form-group">
+            <label>Country</label>
+            <input type="text" id="country" placeholder="e.g. Malaysia" />
+          </div>
+
+          <div class="form-group">
+            <label>Fixed Monthly Expenses</label>
+            <p class="hint">Add things you MUST pay every month (rent, car loan, etc.)</p>
+
+            <div id="expenses-list">
+              <div class="expense-row">
+                <input type="text"   placeholder="e.g. Rent"  class="expense-name" />
+                <input type="number" placeholder="1000"     class="expense-amount" />
+                <button onclick="removeExpense(this)">✕</button>
+              </div>
+            </div>
+
+            <button class="add-btn" onclick="addExpense()">+ Add Expense</button>
+          </div>
+
+          <div class="form-group">
+            <label>Lifestyle Notes (optional)</label>
+            <textarea id="notes" placeholder="e.g. I eat out often, I'm saving for a house..."></textarea>
+          </div>
+
+          <button class="submit-btn" onclick="generatePlan()">Generate My Budget Plan</button>
         </div>
 
-        <button class="add-btn" onclick="addExpense()">+ Add Expense</button>
+        <div class="results-box" id="results" style="display:none">
+          <div class="result-summary" id="result-summary"></div>
+          <div class="health-row">
+            <div class="health-card" id="health-card">
+              <p class="health-label">Budget Health</p>
+              <p class="health-score" id="health-score"></p>
+              <p class="health-text"  id="health-label"></p>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="pie-chart"></canvas>
+            </div>
+          </div>
+          
+          <button class="save-plan-btn" id="save-plan-btn" onclick="saveCurrentPlan()" style="margin-bottom:20px; background:#4a8c5c; color:white; width:100%; padding:14px; border:none; border-radius:12px; font-weight:600; cursor:pointer;">
+            Save This Plan to My Profile
+          </button>
+
+          <h2 class="section-title">Your Budget Breakdown</h2>
+          <div class="cards-grid" id="cards-grid"></div>
+          <h2 class="section-title">Top Tips For You</h2>
+          <div class="tips-box" id="tips-box"></div>
+          <div id="warnings-box"></div>
+          <button class="replan-btn" onclick="replan()">↩ Adjust & Re-plan</button>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Lifestyle Notes (optional)</label>
-        <textarea id="notes" placeholder="e.g. I eat out often, I'm saving for a house..."></textarea>
+      <div id="tab-savings" class="tab-content" style="display: none;">
+        <div class="header">
+          <h1>Target Savings Tracker</h1>
+        </div>
+        <div class="form-box">
+          
+        </div>
       </div>
 
-      <button class="submit-btn" onclick="generatePlan()">Generate My Budget Plan</button>
     </div>
-    <div class="results-box" id="results" style="display:none">
-      <div class="result-summary" id="result-summary"></div>
-      <div class="health-row">
-        <div class="health-card" id="health-card">
-          <p class="health-label">Budget Health</p>
-          <p class="health-score" id="health-score"></p>
-          <p class="health-text"  id="health-label"></p>
-        </div>
-        <div class="chart-wrap">
-          <canvas id="pie-chart"></canvas>
-        </div>
-      </div>
-      <h2 class="section-title">Your Budget Breakdown</h2>
-      <div class="cards-grid" id="cards-grid"></div>
-      <h2 class="section-title">Top Tips For You</h2>
-      <div class="tips-box" id="tips-box"></div>
-      <div id="warnings-box"></div>
-      <button class="replan-btn" onclick="replan()">↩ Adjust & Re-plan</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -1,3 +1,102 @@
+const SUPABASE_URL = "https://fcgitbzeisbfchyiwker.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZ2l0YnplaXNiZmNoeWl3a2VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NjQ1ODcsImV4cCI6MjA5NTA0MDU4N30.jMxlD5iOC8l44YV3WfhyeaIgeNAHN8XiZiT02WB_qnU";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let loggedInUserId = null;
+let loggedInUsername = null;
+
+async function handleAuth() {
+  const usernameInput = document.getElementById('auth-username').value.trim();
+  const passwordInput = document.getElementById('auth-password').value;
+  const btn = document.getElementById('auth-primary-btn');
+
+  if (!usernameInput || !passwordInput) {
+    alert('Please enter both a username and a password!');
+    return;
+  }
+
+  btn.textContent = 'Checking Database...';
+  btn.disabled = true;
+
+  try {
+    const { data: users, error: fetchError } = await supabaseClient
+      .from('user_profiles')
+      .select('*')
+      .eq('username', usernameInput.toLowerCase());
+
+    if (fetchError) throw fetchError;
+
+    if (users && users.length > 0) {
+      const existingUser = users[0];
+      
+      if (existingUser.password === passwordInput) {
+        loggedInUserId = existingUser.id;
+        loggedInUsername = existingUser.username;
+        enterDashboard();
+      } else {
+        alert('This username is taken, and the password you entered is incorrect!');
+      }
+    } 
+    else {
+      const { data: newUser, error: insertError } = await supabaseClient
+        .from('user_profiles')
+        .insert([{ username: usernameInput.toLowerCase(), password: passwordInput }])
+        .select();
+
+      if (insertError) throw insertError;
+
+      alert(`Welcome! Created new profile for: ${usernameInput}`);
+      loggedInUserId = newUser[0].id;
+      loggedInUsername = newUser[0].username;
+      enterDashboard();
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert('Database connection issue: ' + err.message);
+  } finally {
+    btn.textContent = 'Enter Dashboard';
+    btn.disabled = false;
+  }
+}
+
+function enterDashboard() {
+  document.getElementById('auth-box').style.display = 'none';
+  document.getElementById('dashboard-nav').style.display = 'flex';
+  document.getElementById('user-display-email').textContent = `👤 ${loggedInUsername}`;
+  document.getElementById('tab-planner').style.display = 'block';
+}
+
+function handleLogout() {
+  loggedInUserId = null;
+  loggedInUsername = null;
+  
+  document.getElementById('auth-box').style.display = 'block';
+  document.getElementById('dashboard-nav').style.display = 'none';
+  document.getElementById('tab-planner').style.display = 'none';
+  document.getElementById('tab-savings').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+  
+  document.getElementById('auth-username').value = '';
+  document.getElementById('auth-password').value = '';
+}
+
+function switchTab(tabName) {
+  if (tabName === 'planner') {
+    document.getElementById('tab-planner').style.display = 'block';
+    document.getElementById('tab-savings').style.display = 'none';
+    
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+  } else {
+    document.getElementById('tab-planner').style.display = 'none';
+    document.getElementById('tab-savings').style.display = 'block';
+    
+    document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+  }
+}
+
 const loadingTips = [
     "💡 The 50/30/20 rule — 50% needs, 30% wants, 20% savings",
     "💡 Emergency fund should cover 3–6 months of expenses",
