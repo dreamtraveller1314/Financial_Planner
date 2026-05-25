@@ -71,10 +71,10 @@ function saveSession(id, username) {
 }
 
 function enterDashboard() {
-  document.getElementById('auth-box').style.display = 'none';
-  document.getElementById('dashboard-nav').style.display = 'flex';
+  document.getElementById('auth-box').classList.add('hidden');
+  document.getElementById('dashboard-nav').classList.add('visible-flex');
   document.getElementById('user-display-email').textContent = `${loggedInUsername}`;
-  document.getElementById('tab-planner').style.display = 'block';
+  document.getElementById('tab-planner').classList.add('visible-block');
 }
 
 function handleLogout() {
@@ -96,8 +96,8 @@ function showLoading(show) {
   const formContent = document.querySelectorAll('.form-group, .submit-btn');
 
   if (show) {
-    formContent.forEach(el => el.style.display = 'none');
-    screen.style.display = 'block';
+    formContent.forEach(el => el.classList.add('hidden'));
+    screen.classList.add('visible-block');
     let i = 0;
     document.getElementById('loading-text').textContent = loadingTips[0];
     tipInterval = setInterval(() => {
@@ -105,8 +105,8 @@ function showLoading(show) {
       document.getElementById('loading-text').textContent = loadingTips[i];
     }, 2500);
   } else {
-    formContent.forEach(el => el.style.display = '');
-    screen.style.display = 'none';
+    formContent.forEach(el => el.classList.remove('hidden'));
+    screen.classList.remove('visible-block');
     clearInterval(tipInterval);
   }
 }
@@ -143,18 +143,22 @@ function showResults(result) {
   if (saveBtn) {
     saveBtn.textContent = 'Save This Plan to My Profile';
     saveBtn.disabled = false;
-    saveBtn.style.background = '#4a8c5c';
+    saveBtn.className = 'submit-btn btn-save-ready';
   }
-  document.getElementById('results').style.display = 'block';
-  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+  
+  const resultsBox = document.getElementById('results');
+  resultsBox.classList.add('visible-block');
+  resultsBox.scrollIntoView({ behavior: 'smooth' });
+  
   document.getElementById('result-summary').textContent = result.summary;
   document.getElementById('health-score').textContent = result.health_score;
   document.getElementById('health-label').textContent = result.health_label;
   
   const scoreEl = document.getElementById('health-score');
-  if (result.health_score >= 70) scoreEl.style.color = '#4a8c5c';
-  else if (result.health_score >= 40) scoreEl.style.color = '#c8956c';
-  else scoreEl.style.color = '#c0614a';
+  scoreEl.className = 'health-score';
+  if (result.health_score >= 70) scoreEl.classList.add('score-healthy');
+  else if (result.health_score >= 40) scoreEl.classList.add('score-warning');
+  else scoreEl.classList.add('score-critical');
 
   const labels = result.categories.map(c => ' ' + c.name);
   const amounts = result.categories.map(c => c.amount);
@@ -198,16 +202,18 @@ function showResults(result) {
 }
 
 function replan() {
-  document.getElementById('results').style.display = 'none';
+  document.getElementById('results').classList.remove('visible-block');
+  
   const saveBtn = document.getElementById('save-plan-btn');
   if (saveBtn) {
     saveBtn.textContent = 'Save This Plan to My Profile';
     saveBtn.disabled = false;
-    saveBtn.style.background = '#4a8c5c'; 
+    saveBtn.className = 'submit-btn btn-save-ready'; 
   }
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
   document.querySelectorAll('.form-group, .submit-btn')
-    .forEach(el => el.style.display = '');
+    .forEach(el => el.classList.remove('hidden'));
 }
 
 async function generatePlan() {
@@ -224,7 +230,7 @@ async function generatePlan() {
   const btn = document.querySelector('.submit-btn');
   btn.textContent = 'Planning for you...';
   btn.disabled = true;
-  document.getElementById('results').style.display = 'none';
+  document.getElementById('results').classList.remove('visible-block');
   showLoading(true);
 
   const expensesText = expenses.length > 0 ? expenses.map(e => `${e.name}: ${e.amount}`).join(', ') : 'None provided';
@@ -266,10 +272,11 @@ async function saveCurrentPlan() {
 
     if (error) throw error;
     saveBtn.textContent = 'Plan Saved!';
-    saveBtn.style.background = '#2e5c3c';
+    saveBtn.className = 'submit-btn btn-save-success';
   } catch (err) {
     console.error("Save error:", err);
     saveBtn.textContent = 'Save This Plan to My Profile';
+    saveBtn.className = 'submit-btn btn-save-ready';
     saveBtn.disabled = false;
   }
 }

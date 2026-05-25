@@ -1,0 +1,14 @@
+.history-empty-box {
+  text-align: center;
+  padding: 40px;
+  color: #8c7b6b;
+  font-style: italic;
+}
+
+.history-score-value {
+  font-weight: 700;
+}
+
+#tab-history .chart-wrap {
+  min-height: 220px;
+}

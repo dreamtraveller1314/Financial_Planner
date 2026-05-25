@@ -1,0 +1,195 @@
+.tracker-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.empty-goals-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #8c7b6b;
+  padding: 32px;
+  font-style: italic;
+}
+
+
+.goal-card {
+  padding: 20px;
+  padding-bottom: 24px;
+  background: #fffdf9;
+  border: 1.5px solid #ede5d8;
+  border-radius: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.goal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.goal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2d2a26;
+  font-family: 'Segoe UI', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goal-delete-btn {
+  background: none;
+  border: none;
+  color: #c0614a;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Segoe UI', sans-serif;
+  opacity: 0.6;
+  padding: 4px;
+  margin-right: -4px;
+  transition: opacity 0.2s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.goal-delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.goal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2d2a26;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.goal-badge {
+  background: #c8956c;
+  color: #fffdf9;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 700;
+}
+
+.goal-badge.completed {
+  background: #2e5c3c;
+}
+
+.goal-progress-wrap {
+  height: 6px;
+  background: #ede5d8;
+  border-radius: 4px;
+  margin: 16px 0 12px;
+  overflow: hidden;
+}
+
+.goal-progress-bar {
+  height: 100%;
+  background: #c8956c;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.goal-progress-bar.completed {
+  background: #2e5c3c;
+}
+
+.goal-ledger-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4a3f35;
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 16px;
+}
+
+.goal-congrats-banner {
+  background: #e6f4ea;
+  color: #137333;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 10px;
+  border: 1.5px dashed #137333;
+  animation: trackerPop 0.3s ease-out;
+}
+
+@keyframes trackerPop {
+  0% { transform: scale(0.96); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.goal-log-section {
+  margin-top: 10px;
+  border-top: 1.5px dashed #ede5d8;
+  padding-top: 14px;
+}
+
+.goal-log-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8c7b6b;
+  display: block;
+  margin-bottom: 6px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.goal-log-row {
+  display: flex;
+  gap: 8px;
+}
+
+.goal-log-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid #e8ddd0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #fffdf9;
+  outline: none;
+}
+
+.goal-log-input:focus {
+  border-color: #c8956c;
+}
+
+.goal-log-submit {
+  background: #2d2a26;
+  color: #fdf6ee;
+  border: none;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.2s;
+}
+
+.goal-log-submit:hover {
+  background: #1a1814;
+}
+
+@media (max-width: 480px) {
+  .tracker-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

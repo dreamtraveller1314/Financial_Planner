@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css">
-  <title>Financial Planner - Saved History</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="history.css">
+    <title>Financial Planner - Saved History</title>
+  </head>
+  <body>
 
-  <div class="nav-container">
-    <span class="user-email" id="user-display-email"></span>
-    <div class="nav-tabs">
-      <a href="index.html" class="tab-btn">Budget Planner</a>
-      <a href="history.html" class="tab-btn active">Saved History</a> 
-      <a href="tracker.html" class="tab-btn">Savings Tracker</a>
-    </div>
-    <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
-  </div>
-
-  <div class="container">
-    <div id="tab-history" class="tab-content">
-      <div class="header">
-        <h1>Your Last Saved Budget Plan</h1>
-        <p>Review the saved Budget Plan on your profile every time you log in</p>
+    <div class="nav-container">
+      <span class="user-email" id="user-display-email"></span>
+      <div class="nav-tabs">
+        <a href="index.html" class="tab-btn">Budget Planner</a>
+        <a href="history.html" class="tab-btn active">Saved History</a> 
+        <a href="tracker.html" class="tab-btn">Savings Tracker</a>
       </div>
+      <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+    </div>
 
-      <div class="results-box" id="history-results" style="display:none;">
-        <div class="result-summary" id="history-summary"></div>
-        
-        <div class="health-row">
-          <div class="health-card" id="history-health-card">
-            <p class="health-label">Budget Health</p>
-            <p class="health-score" id="history-health-score"></p>
-            <p class="health-text" id="history-health-label"></p>
-          </div>
-          <div class="chart-wrap">
-            <canvas id="history-pie-chart"></canvas>
-          </div>
+    <div class="container">
+      <div id="tab-history" class="tab-content">
+        <div class="header">
+          <h1>Your Last Saved Budget Plan</h1>
+          <p>Review the saved Budget Plan on your profile every time you log in</p>
         </div>
 
-        <h2 class="section-title">Your Budget Breakdown</h2>
-        <div class="cards-grid" id="history-cards-grid"></div>
-        
-        <h2 class="section-title">Top Tips For You</h2>
-        <div class="tips-box" id="history-tips-box"></div>
-      </div>
+        <div class="results-box" id="history-results" style="display:none;">
+          <div class="result-summary" id="history-summary"></div>
+          
+          <div class="health-row">
+            <div class="health-card" id="history-health-card">
+              <p class="health-label">Budget Health</p>
+              <p class="health-score history-score-value" id="history-health-score"></p>
+              <p class="health-text" id="history-health-label"></p>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="history-pie-chart"></canvas>
+            </div>
+          </div>
 
-      <div id="history-empty-message" class="form-box" style="text-align: center; padding: 40px; color: #8c7b6b; display:none;">
-        <p>You haven't saved any budget plans yet! Go to the Budget Planner tab and click save.</p>
-      </div>
-    </div> 
-  </div>
+          <h2 class="section-title">Your Budget Breakdown</h2>
+          <div class="cards-grid" id="history-cards-grid"></div>
+          
+          <h2 class="section-title">Top Tips For You</h2>
+          <div class="tips-box" id="history-tips-box"></div>
+        </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="history.js"></script>
-</body>
+        <div id="history-empty-message" class="form-box history-empty-box" style="display:none;">
+          <p>You haven't saved any budget plans yet! Go to the Budget Planner tab and click save.</p>
+        </div>
+      </div> 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="history.js"></script>
+  </body>
 </html>
