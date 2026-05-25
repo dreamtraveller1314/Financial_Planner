@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css">
-    <title>Financial Planner</title>
+    <title>Financial Planner - Home</title>
   </head>
-
   <body>
 
     <div id="dashboard-nav" class="nav-container" style="display: none;">
       <span class="user-email" id="user-display-email"></span>
       <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('planner')">Budget Planner</button>
-        <button class="tab-btn" onclick="switchTab('history')">Saved History</button> 
-        <button class="tab-btn" onclick="switchTab('savings')">Savings Tracker</button>
+        <a href="index.html" class="tab-btn active">Budget Planner</a>
+        <a href="history.html" class="tab-btn">Saved History</a> 
+        <a href="tracker.html" class="tab-btn">Savings Tracker</a>
       </div>
       <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
     </div>
@@ -27,17 +25,14 @@
           <h2>Welcome to Financial Planner</h2>
           <p>Enter your username and password.</p>
         </div>
-        
         <div class="form-group">
           <label>Username</label>
           <input type="text" id="auth-username"/>
         </div>
-        
         <div class="form-group">
           <label>Password</label>
           <input type="password" id="auth-password"/>
         </div>
-
         <button class="submit-btn" id="auth-primary-btn" onclick="handleAuth()">Sign In / Sign Up</button>
       </div>
 
@@ -66,15 +61,13 @@
           <div class="form-group">
             <label>Fixed Monthly Expenses</label>
             <p class="hint">Add things you MUST pay every month (rent, car loan, etc.)</p>
-
             <div id="expenses-list">
               <div class="expense-row">
-                <input type="text"   placeholder="e.g. Rent"  class="expense-name" />
-                <input type="number" placeholder="1000"     class="expense-amount" />
+                <input type="text" placeholder="e.g. Rent" class="expense-name" />
+                <input type="number" placeholder="1000" class="expense-amount" />
                 <button onclick="removeExpense(this)">✕</button>
               </div>
             </div>
-
             <button class="add-btn" onclick="addExpense()">+ Add Expense</button>
           </div>
 
@@ -92,7 +85,7 @@
             <div class="health-card" id="health-card">
               <p class="health-label">Budget Health</p>
               <p class="health-score" id="health-score"></p>
-              <p class="health-text"  id="health-label"></p>
+              <p class="health-text" id="health-label"></p>
             </div>
             <div class="chart-wrap">
               <canvas id="pie-chart"></canvas>
@@ -111,49 +104,8 @@
           <button class="replan-btn" onclick="replan()">↩ Adjust & Re-plan</button>
         </div>
       </div>
+    </div>
 
-      <div id="tab-savings" class="tab-content" style="display: none;">
-        <div class="header">
-          <h1>Target Savings Tracker</h1>
-        </div>
-        <div class="form-box">
-          <p style="text-align:center; color:#8c7b6b; font-style:italic;">Savings module coming up next...</p>
-        </div>
-      </div> 
-
-      <div id="tab-history" class="tab-content" style="display: none;">
-        <div class="header">
-          <h1>Your Last Saved Budget Plan</h1>
-          <p>Review the saved Budget Plan on your profile everytime you enter</p>
-        </div>
-
-        <div class="results-box" id="history-results" style="display:none;">
-          <div class="result-summary" id="history-summary"></div>
-          
-          <div class="health-row">
-            <div class="health-card" id="history-health-card">
-              <p class="health-label">Budget Health</p>
-              <p class="health-score" id="history-health-score"></p>
-              <p class="health-text"  id="history-health-label"></p>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="history-pie-chart"></canvas>
-            </div>
-          </div>
-
-          <h2 class="section-title">Your Budget Breakdown</h2>
-          <div class="cards-grid" id="history-cards-grid"></div>
-          
-          <h2 class="section-title">Top Tips For You</h2>
-          <div class="tips-box" id="history-tips-box"></div>
-        </div>
-
-        <div id="history-empty-message" class="form-box" style="text-align: center; padding: 40px; color: #8c7b6b;">
-          <p>You haven't saved any budget plans yet! Go to the Budget Planner tab and click save.</p>
-        </div>
-      </div> 
-
-    </div> 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>

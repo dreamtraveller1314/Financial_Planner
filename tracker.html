@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <title>Financial Planner - Savings Tracker</title>
+</head>
+<body>
+
+  <div class="nav-container">
+    <span class="user-email" id="user-display-email"></span>
+    <div class="nav-tabs">
+      <a href="index.html" class="tab-btn">Budget Planner</a>
+      <a href="history.html" class="tab-btn">Saved History</a> 
+      <a href="tracker.html" class="tab-btn active">Savings Tracker</a>
+    </div>
+    <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+  </div>
+
+  <div class="container">
+    <div id="tab-savings" class="tab-content">
+      <div class="header">
+        <h1>Target Savings Tracker</h1>
+        <p>Manage your custom financial goals here</p>
+      </div>
+      <div class="form-box">
+      </div>
+    </div> 
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="tracker.js"></script>
+</body>
+</html>
