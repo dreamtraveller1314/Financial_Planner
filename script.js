@@ -4,6 +4,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let loggedInUserId = null;
 let loggedInUsername = null;
+let latestAIPlanData = null;
 
 async function handleAuth() {
   const usernameInput = document.getElementById('auth-username').value.trim();
@@ -319,6 +320,7 @@ function showResults(result) {
       clearTimeout(timeout);
       const data = await response.json();
       const result = JSON.parse(data.reply);
+      latestAIPlanData = result;
       
       console.log('AI Prompt:', prompt);
       console.log('AI Budget Plan:', result);
@@ -332,4 +334,46 @@ function showResults(result) {
       btn.disabled = false;
       showLoading(false);
     }
+}
+
+async function saveCurrentPlan() {
+  const saveBtn = document.getElementById('save-plan-btn');
+
+  if (!loggedInUserId) {
+    alert("You must be logged in to save a plan!");
+    return;
+  }
+
+  if (!latestAIPlanData) {
+    alert("Please generate a budget plan first before saving!");
+    return;
+  }
+
+  saveBtn.textContent = 'Saving to profile...';
+  saveBtn.disabled = true;
+
+  try {
+    const incomeValue = parseFloat(document.getElementById('income').value) || 0;
+    const { data, error } = await supabaseClient
+      .from('budget_plans')
+      .insert([
+        {
+          user_id: loggedInUserId,
+          income: incomeValue,
+          plan_data: latestAIPlanData
+        }
+      ]);
+
+    if (error) throw error;
+
+    saveBtn.textContent = 'Plan Saved!';
+    saveBtn.style.background = '#2e5c3c';
+
+  } catch (err) {
+    console.error("Save error:", err);
+    alert('Failed to save plan: ' + err.message);
+    
+    saveBtn.textContent = 'Save This Plan to My Profile';
+    saveBtn.disabled = false;
+  }
 }
