@@ -5,6 +5,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let loggedInUserId = null;
 let loggedInUsername = null;
 let latestAIPlanData = null;
+let historyChartInstance = null;
 
 async function handleAuth() {
   const usernameInput = document.getElementById('auth-username').value.trim();
@@ -16,7 +17,7 @@ async function handleAuth() {
     return;
   }
 
-  btn.textContent = 'Checking Database...';
+  btn.textContent = 'Signing In...';
   btn.disabled = true;
 
   try {
@@ -64,7 +65,7 @@ async function handleAuth() {
 function enterDashboard() {
   document.getElementById('auth-box').style.display = 'none';
   document.getElementById('dashboard-nav').style.display = 'flex';
-  document.getElementById('user-display-email').textContent = `👤 ${loggedInUsername}`;
+  document.getElementById('user-display-email').textContent = `${loggedInUsername}`;
   document.getElementById('tab-planner').style.display = 'block';
 }
 
@@ -83,18 +84,26 @@ function handleLogout() {
 }
 
 function switchTab(tabName) {
+  document.getElementById('tab-planner').style.display = 'none';
+  document.getElementById('tab-history').style.display = 'none';
+  document.getElementById('tab-savings').style.display = 'none';
+
+  const buttons = document.querySelectorAll('.tab-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+
   if (tabName === 'planner') {
     document.getElementById('tab-planner').style.display = 'block';
-    document.getElementById('tab-savings').style.display = 'none';
+    buttons[0].classList.add('active');
+  } 
+  else if (tabName === 'history') {
+    document.getElementById('tab-history').style.display = 'block';
+    buttons[1].classList.add('active');
     
-    document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    document.querySelectorAll('.tab-btn')[1].classList.remove('active');
-  } else {
-    document.getElementById('tab-planner').style.display = 'none';
+    loadSavedBudgetHistory();
+  } 
+  else if (tabName === 'savings') {
     document.getElementById('tab-savings').style.display = 'block';
-    
-    document.querySelectorAll('.tab-btn')[0].classList.remove('active');
-    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    buttons[2].classList.add('active');
   }
 }
 
@@ -375,5 +384,120 @@ async function saveCurrentPlan() {
     
     saveBtn.textContent = 'Save This Plan to My Profile';
     saveBtn.disabled = false;
+  }
+}
+
+async function loadSavedBudgetHistory() {
+  if (!loggedInUserId) return;
+
+  try {
+    const { data: plans, error } = await supabaseClient
+      .from('budget_plans')
+      .select('*')
+      .eq('user_id', loggedInUserId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const resultsBox = document.getElementById('history-results');
+    const emptyMsg = document.getElementById('history-empty-message');
+
+    if (plans && plans.length > 0) {
+      const savedPlan = plans[0].plan_data;
+
+      emptyMsg.style.display = 'none';
+      resultsBox.style.display = 'block';
+
+      document.getElementById('history-summary').textContent = savedPlan.summary || "No saved summary details.";
+      document.getElementById('history-health-score').textContent = savedPlan.health_score || "N/A";
+      document.getElementById('history-health-label').textContent = savedPlan.health_label || "";
+      
+      const scoreEl = document.getElementById('history-health-score');
+      if (savedPlan.health_score >= 70) {
+        scoreEl.style.color = '#4a8c5c';
+      } else if (savedPlan.health_score >= 40) {
+        scoreEl.style.color = '#c8956c';
+      } else {
+        scoreEl.style.color = '#c0614a';
+      }
+
+      const cardsGrid = document.getElementById('history-cards-grid');
+      cardsGrid.innerHTML = ''; 
+      if (savedPlan.categories) {
+        savedPlan.categories.forEach(cat => {
+          cardsGrid.innerHTML += `
+            <div class="cat-card">
+              <div class="cat-top">
+                <span class="cat-name">${cat.name}</span>
+                <span class="cat-percent">${cat.percent}%</span>
+              </div>
+              <div class="cat-bar-wrap">
+                <div class="cat-bar" style="width: ${cat.percent}%"></div>
+              </div>
+              <div class="cat-amount">${Number(cat.amount).toLocaleString()}</div>
+              <div class="cat-tip">${cat.tip || ''}</div>
+            </div>
+          `;
+        });
+      }
+
+      const tipsBox = document.getElementById('history-tips-box');
+      tipsBox.innerHTML = '';
+      if (savedPlan.top_tips) {
+        savedPlan.top_tips.forEach(tip => {
+          tipsBox.innerHTML += `
+            <div class="tip-item">
+              <div class="tip-dot"></div>
+              <span>${tip}</span>
+            </div>
+          `;
+        });
+      }
+
+      const ctx = document.getElementById('history-pie-chart').getContext('2d');
+      if (historyChartInstance) historyChartInstance.destroy();
+      
+      const labels = savedPlan.categories ? savedPlan.categories.map(c => ' ' + c.name) : [];
+      const dataValues = savedPlan.categories ? savedPlan.categories.map(c => c.amount) : [];
+      const colors = [
+        '#c8956c','#e8b89a','#8fae8b','#b5c99a',
+        '#7da0b5','#a8c4d4','#c4a882','#d4b896',
+        '#9b8ea0','#c2b5c8'
+      ];
+
+      historyChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: dataValues,
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: '#fffdf9'
+          }]
+        },
+        options: { 
+          responsive: true, 
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: { size: 11, family: 'Segoe UI' },
+                color: '#4a3f35',
+                padding: 10,
+                boxWidth: 12
+              }
+            }
+          }
+        }
+      });
+
+    } 
+    else {
+      emptyMsg.style.display = 'block';
+      resultsBox.style.display = 'none';
+    }
+  } catch (err) {
+    console.error("Error loading historical profile payload:", err);
   }
 }
