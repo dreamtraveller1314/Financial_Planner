@@ -280,3 +280,19 @@ async function saveCurrentPlan() {
     saveBtn.disabled = false;
   }
 }
+
+function exportPlanToPDF() {
+  const element = document.getElementById('results');
+  if (!element) return;
+
+  const originalContent = document.body.innerHTML;
+  const printContent = element.innerHTML;
+
+  document.body.innerHTML = printContent;
+
+  window.print();
+
+  document.body.innerHTML = originalContent;
+  
+  window.location.reload(); 
+}

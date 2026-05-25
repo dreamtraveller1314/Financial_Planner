@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js" defer></script>
     <title>Financial Planner - Home</title>
   </head>
   <body>
@@ -91,23 +95,20 @@
               <canvas id="pie-chart"></canvas>
             </div>
           </div>
-          
-          <button class="save-plan-btn" id="save-plan-btn" onclick="saveCurrentPlan()" style="margin-bottom:20px; background:#4a8c5c; color:white; width:100%; padding:14px; border:none; border-radius:12px; font-weight:600; cursor:pointer;">
-            Save This Plan to My Profile
-          </button>
 
           <h2 class="section-title">Your Budget Breakdown</h2>
           <div class="cards-grid" id="cards-grid"></div>
           <h2 class="section-title">Top Tips For You</h2>
           <div class="tips-box" id="tips-box"></div>
           <div id="warnings-box"></div>
-          <button class="replan-btn" onclick="replan()">↩ Adjust & Re-plan</button>
+          <div class="action-row">
+            <button id="save-plan-btn" class="submit-btn btn-save-ready" onclick="saveCurrentPlan()">Save This Plan to My Profile</button>
+            <button id="export-pdf-btn" class="submit-btn" style="background: #8c7b6b;" onclick="exportPlanToPDF()">Export to PDF</button>
+            <button class="replan-btn" onclick="replan()">↩ Adjust & Re-plan</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
   </body>
 </html>
