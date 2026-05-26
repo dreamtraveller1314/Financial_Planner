@@ -499,14 +499,67 @@ textarea {
 }
 
 @media print {
-  body {
-    background: #fffdf9 !important;
+  html, body {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 !important;
     padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: #fffdf9 !important;
   }
-  .action-row, 
+
+  #dashboard-nav,
+  #auth-box,
+  .header,
+  .form-box,
+  .action-row,
   .replan-btn,
   #export-pdf-btn,
-  #save-plan-btn {
+  #save-plan-btn,
+  .loading-screen {
     display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #tips-box,
+  .tips-box,
+  .section-title:nth-of-type(2),
+  h2:has(+ #tips-box) {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #results {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  .cat-card {
+    page-break-inside: avoid !important; 
+    break-inside: avoid !important;
+    display: inline-block !important;
+    width: 100% !important;
+    background: #fffdf9 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    margin-bottom: 12px !important;
+  }
+
+  #print-chart-static-img {
+    display: block !important;
+    max-height: 240px !important;
+    width: auto !important;
+    margin: 0 auto 15px auto !important;
   }
 }

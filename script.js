@@ -172,7 +172,7 @@ function showResults(result) {
       labels: labels,
       datasets: [{ data: amounts, backgroundColor: colors, borderWidth: 2, borderColor: '#fffdf9' }]
     },
-    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Segoe UI' }, color: '#4a3f35', padding: 10, boxWidth: 12 }}}}
+    options: { responsive: true, animation: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Segoe UI' }, color: '#4a3f35', padding: 10, boxWidth: 12 }}}}
   });
 
   const grid = document.getElementById('cards-grid');
@@ -285,14 +285,41 @@ function exportPlanToPDF() {
   const element = document.getElementById('results');
   if (!element) return;
 
-  const originalContent = document.body.innerHTML;
-  const printContent = element.innerHTML;
+  const chartCanvas = document.getElementById('pie-chart');
 
-  document.body.innerHTML = printContent;
+  const triggerPrintWindow = () => {
+    window.print();
+    
+    if (chartCanvas) {
+      chartCanvas.style.display = 'block';
+      const tempImg = document.getElementById('print-chart-static-img');
+      if (tempImg) tempImg.remove();
+    }
+  };
 
-  window.print();
+  if (chartCanvas) {
+    try {
+      const chartDataUrl = chartCanvas.toDataURL('image/png');
+      
+      const tempImg = document.createElement('img');
+      tempImg.id = 'print-chart-static-img';
+      tempImg.style.width = '100%';
+      tempImg.style.maxWidth = '260px';
+      tempImg.style.display = 'block';
+      tempImg.style.margin = '0 auto';
+      tempImg.onload = function() {
+        chartCanvas.style.setProperty('display', 'none', 'important');
+        chartCanvas.parentNode.appendChild(tempImg);
+        setTimeout(triggerPrintWindow, 50);
+      };
 
-  document.body.innerHTML = originalContent;
-  
-  window.location.reload(); 
+      tempImg.src = chartDataUrl;
+
+    } catch (e) {
+      console.error("Failed to copy chart canvas for printing:", e);
+      window.print();
+    }
+  } else {
+    window.print();
+  }
 }
