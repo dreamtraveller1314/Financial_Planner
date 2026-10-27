@@ -24,7 +24,7 @@ app.post('/chat', async (req, res) => {
         { role: "system", content: "You are a financial advisor. Reply ONLY with raw JSON." },
         { role: "user", content: message }
       ],
-      model: "llama-3.1-8b-instant", 
+      model: "openai/gpt-oss-20b", 
       response_format: { type: "json_object" } 
     });
 
